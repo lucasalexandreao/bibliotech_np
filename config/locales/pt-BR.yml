@@ -1,0 +1,12 @@
+pt-BR:
+  activerecord:
+    models:
+      bibliotecario: "Bibliotecário"
+    attributes:
+      bibliotecario:
+        nome: "Nome"
+        email: "E-mail"
+        password: "Senha"
+        password_confirmation: "Confirmação de senha"
+        current_password: "Senha atual"
+        papel: "Nível de acesso"
