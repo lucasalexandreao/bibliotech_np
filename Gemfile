@@ -63,3 +63,5 @@ group :test do
 end
 
 gem "tailwindcss-rails", "~> 4.6"
+
+gem "rails-i18n", "~> 8.1"
