@@ -65,3 +65,9 @@ end
 gem "tailwindcss-rails", "~> 4.6"
 
 gem "rails-i18n", "~> 8.1"
+
+gem "devise", "~> 5.0"
+gem "cancancan", "~> 3.6"
+gem "acts_as_paranoid", "~> 0.11.0"
+
+gem "devise-i18n", "~> 1.16"
