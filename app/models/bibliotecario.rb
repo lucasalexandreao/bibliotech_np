@@ -12,6 +12,10 @@ class Bibliotecario < ApplicationRecord
   # Validações
   validate :senha_obrigatoria_no_primeiro_acesso
 
+  def self.ransackable_attributes(auth_object = nil)
+    ["nome", "email", "papel"]
+  end
+
   private
 
   def senha_obrigatoria_no_primeiro_acesso

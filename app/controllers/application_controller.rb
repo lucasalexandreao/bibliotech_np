@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def current_ability
+    @current_ability || Ability.new(current_bibliotecario)
+  end
+
   def exigir_troca_senha
     return if !bibliotecario_signed_in? || devise_controller?
 
