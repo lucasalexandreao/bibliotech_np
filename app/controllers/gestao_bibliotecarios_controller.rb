@@ -7,14 +7,19 @@ class GestaoBibliotecariosController < ApplicationController
     @q = Bibliotecario.ransack(params[:q])
     
     # Executa a busca e passa o resultado para o Pagy paginar
-    @pagy, @bibliotecarios = pagy(:offset, @q.result(distinct: true).order(:nome), limit: 1)
+    @pagy, @bibliotecarios = pagy(:offset, @q.result(distinct: true).order(:nome), limit: 2)
   end
 
   def new
   end
 
   def create
+    senha_provisoria = params[:bibliotecario][:password]
+
     if @bibliotecario.save
+      # Dispara o e-mail de boas-vindas com as credenciais
+      BibliotecarioMailer.boas_vindas(@bibliotecario, senha_provisoria).deliver_now
+
       redirect_to gestao_bibliotecarios_path, notice: 'Bibliotecário cadastrado com sucesso.'
     else
       render :new, status: :unprocessable_entity
