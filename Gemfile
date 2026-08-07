@@ -71,3 +71,6 @@ gem "cancancan", "~> 3.6"
 gem "acts_as_paranoid", "~> 0.11.0"
 
 gem "devise-i18n", "~> 1.16"
+
+gem "ransack", "~> 4.4"
+gem "pagy", "~> 43.6"

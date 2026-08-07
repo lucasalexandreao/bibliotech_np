@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+/* Estilos para a paginação do Pagy */
+.pagy {
+  @apply inline-flex -space-x-px text-sm shadow-sm;
+}
+.pagy a, .pagy span, .pagy b, .pagy em, .pagy label {
+  @apply relative inline-flex items-center px-4 py-2 border border-gray-200 bg-white text-gray-500 hover:bg-gray-50;
+}
+/* Captura a página ativa com força bruta */
+.pagy .current, .pagy [aria-current="page"], .pagy b, .pagy em {
+  @apply z-10 bg-blue-50 border-blue-500 text-blue-600 font-bold pointer-events-none;
+}
+.pagy .gap {
+  @apply px-4 py-2 text-gray-500 bg-white border border-gray-200;
+}
+.pagy > *:first-child {
+  @apply rounded-l-md;
+}
+.pagy > *:last-child {
+  @apply rounded-r-md;
+}
