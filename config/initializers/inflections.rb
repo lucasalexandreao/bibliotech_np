@@ -5,6 +5,7 @@
 # locales as you wish. All of these examples are active by default:
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.plural "papel", "papeis"
+  inflect.plural "ategoria", "ategorias"
 end
 
 # These inflection rules are supported but not enabled by default:
