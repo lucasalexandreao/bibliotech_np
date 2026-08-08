@@ -1,0 +1,54 @@
+class Emprestimo < ApplicationRecord
+  belongs_to :livro
+  belongs_to :usuario
+
+  attr_accessor :senha_emprestimo_digitada
+
+  enum :status, { ativo: 0, devolvido: 1 }
+
+  validates :data_emprestimo, :data_devolucao_prevista, presence: true
+  validate :validar_senha_usuario, on: :create
+  validate :livro_deve_estar_disponivel, on: :create
+
+  before_validation :configurar_datas, on: :create
+  after_create :marcar_livro_como_emprestado
+
+  private
+
+  def configurar_datas
+    self.data_emprestimo ||= Date.current
+    self.status ||= :ativo
+
+    self.data_devolucao_prevista ||= calcular_dias_uteis(self.data_emprestimo, 15)
+  end
+
+  def calcular_dias_uteis(data_inicial, dias)
+    data = data_inicial
+    dias.times do
+      data += 1.day
+      data += 1.day while data.saturday? || data.sunday?
+    end
+
+    data
+  end
+
+  def validar_senha_usuario
+    return if usuario.blank?
+
+    if senha_emprestimo_digitada.blank?
+      errors.add(:senha_emprestimo_digitada, "deve ser informada")
+    elsif usuario.senha_emprestimo != senha_emprestimo_digitada.strip.upcase
+      errors.add(:senha_emprestimo_digitada, "inválida. Verifique com o usuário.")
+    end
+  end
+
+  def livro_deve_estar_disponivel
+    if livro && !livro.disponivel?
+      errors.add(:livro, "não está disponível no momento")
+    end
+  end
+
+  def marcar_livro_como_emprestado
+    livro.emprestado!
+  end
+end

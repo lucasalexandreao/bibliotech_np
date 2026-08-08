@@ -1,5 +1,6 @@
 class Livro < ApplicationRecord
   belongs_to :categoria
+  has_many :emprestimos, dependent: :restrict_with_error
 
   mount_uploader :capa, CapaUploader
 

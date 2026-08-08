@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  livro: one
+  usuario: one
+  data_emprestimo: 2026-08-08
+  data_devolucao_prevista: 2026-08-08
+  data_devolucao_realizada: 2026-08-08
+  status: 1
+
+two:
+  livro: two
+  usuario: two
+  data_emprestimo: 2026-08-08
+  data_devolucao_prevista: 2026-08-08
+  data_devolucao_realizada: 2026-08-08
+  status: 1
