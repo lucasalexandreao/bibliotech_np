@@ -8,6 +8,7 @@ class Bibliotecario < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   validates :nome, presence: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validate :senha_obrigatoria_no_primeiro_acesso
 
   def self.ransackable_attributes(auth_object = nil)
