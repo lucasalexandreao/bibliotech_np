@@ -1,0 +1,38 @@
+<div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+  <div class="flex justify-between items-start mb-6">
+    <h1 class="text-2xl font-bold text-gray-800"><%= @livro.titulo %></h1>
+    <%= link_to "Voltar", livros_path, class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded text-sm" %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="flex justify-center">
+      <% if @livro.capa.present? %>
+        <%= image_tag @livro.capa.url, class: "w-48 h-64 object-cover rounded-lg shadow-md border border-gray-200" %>
+      <% else %>
+        <div class="w-48 h-64 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400">Sem Capa</div>
+      <% end %>
+    </div>
+
+    <div class="md:col-span-2 space-y-3">
+      <p><strong class="text-gray-700">Autor:</strong> <%= @livro.autor %></p>
+      <p><strong class="text-gray-700">Categoria:</strong> <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"><%= @livro.categoria.nome %></span></p>
+      <p>
+        <strong class="text-gray-700">Status:</strong> 
+        <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full <%= @livro.disponivel? ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+          <%= @livro.status.humanize %>
+        </span>
+      </p>
+
+      <% if @livro.observacoes.present? %>
+        <div class="pt-2">
+          <strong class="text-gray-700 block mb-1">Observações:</strong>
+          <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded border border-gray-200"><%= @livro.observacoes %></p>
+        </div>
+      <% end %>
+
+      <div class="pt-4 flex gap-2">
+        <%= link_to "Editar Livro", edit_livro_path(@livro), class: "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded text-sm" %>
+      </div>
+    </div>
+  </div>
+</div>

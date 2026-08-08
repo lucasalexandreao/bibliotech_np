@@ -1,0 +1,56 @@
+<%= form_with(model: @livro, html: { multipart: true }, class: "space-y-4") do |f| %>
+  <% if @livro.errors.any? %>
+    <div class="bg-red-50 text-red-600 p-4 rounded mb-4">
+      <ul class="list-disc pl-5">
+        <% @livro.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <%= f.label :titulo, "Título do Livro*", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :titulo, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border" %>
+    </div>
+
+    <div>
+      <%= f.label :autor, "Autor(a)*", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :autor, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border" %>
+    </div>
+
+    <div>
+      <%= f.label :categoria_id, "Categoria*", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :categoria_id, Categoria.order(:nome), :id, :nome, { prompt: "Selecione uma categoria" }, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border bg-white" %>
+    </div>
+
+    <div>
+      <%= f.label :status, "Status do Exemplar", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.select :status, Livro.statuses.keys.map { |s| [s.humanize, s] }, {}, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border bg-white" %>
+    </div>
+
+    <div class="md:col-span-2">
+      <%= f.label :observacoes, "Observações (opcional)", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :observacoes, rows: 3, placeholder: "Ex: Capa um pouco desgastada, exemplar doado...", class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border" %>
+    </div>
+
+    <div class="md:col-span-2">
+      <%= f.label :capa, "Imagem da Capa (opcional)", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.file_field :capa, accept: "image/*", class: "mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" %>
+      <%= f.hidden_field :capa_cache %>
+    </div>
+  </div>
+
+  <% if @livro.capa.present? %>
+    <div class="mt-4">
+      <span class="block text-xs font-medium text-gray-500 mb-1">Capa Atual:</span>
+      <%= image_tag @livro.capa.url, class: "w-24 h-32 object-cover rounded shadow border" %>
+    </div>
+  <% end %>
+
+  <div class="flex justify-end gap-2 pt-4">
+    <%= link_to "Cancelar", livros_path, class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded" %>
+    <%= f.submit "Salvar Livro", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer transition-colors" %>
+  </div>
+<% end %>

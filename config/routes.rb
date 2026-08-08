@@ -9,4 +9,5 @@ Rails.application.routes.draw do
 
   resources :gestao_bibliotecarios, except: [ :show ]
   resources :categorias, except: [ :show ]
+  resources :livros
 end

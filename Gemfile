@@ -76,3 +76,5 @@ gem "ransack", "~> 4.4"
 gem "pagy", "~> 43.6"
 
 gem "letter_opener", "~> 1.10", :group => :development
+
+gem "carrierwave", "~> 3.0"
