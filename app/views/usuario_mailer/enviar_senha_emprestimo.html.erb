@@ -1,0 +1,17 @@
+<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+  <h2 style="color: #1e40af;">Olá, <%= @usuario&.nome %>!</h2>
+  
+  <p>Seu cadastro na Biblioteca Municipal Ney Pontes foi realizado com sucesso.</p>  
+  <p>Para realizar o empréstimo de livros no balcão da biblioteca, você precisará informar a sua <strong>Senha de Empréstimo</strong> individual.</p>
+
+  <div style="background-color: #f3f4f6; padding: 20px; border-radius: 6px; margin: 20px 0; text-align: center;">
+    <span style="font-size: 0.9em; color: #4b5563; display: block; margin-bottom: 5px;">Sua Senha de Empréstimo:</span>
+    <span style="font-size: 1.8em; font-weight: bold; letter-spacing: 4px; color: #1e3a8a; background: #dbeafe; padding: 6px 16px; border-radius: 6px; display: inline-block;">
+      <%= @usuario&.senha_emprestimo %>
+    </span>
+  </div>
+
+  <p style="color: #6b7280; font-size: 0.85em;">
+    Guarde esta senha com segurança. Ela será solicitada sempre que você for retirar um livro no acervo.
+  </p>
+</div>

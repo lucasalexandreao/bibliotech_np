@@ -1,0 +1,64 @@
+<%= form_with(model: @usuario, class: "space-y-4") do |f| %>
+  <% if @usuario.errors.any? %>
+    <div class="bg-red-50 text-red-600 p-4 rounded mb-4">
+      <ul class="list-disc pl-5">
+        <% @usuario.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :nome, "Nome Completo", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :nome, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border", placeholder: "Ex: Maria da Silva" %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <%= f.label :cpf, "CPF", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :cpf, id: "usuario_cpf", maxlength: 14, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border", placeholder: "000.000.000-00", oninput: "mascaraCPF(this)" %>
+    </div>
+
+    <div>
+      <%= f.label :telefone, "Telefone / WhatsApp", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :telefone, id: "usuario_telefone", maxlength: 15, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border", placeholder: "(84) 99999-9999", oninput: "mascaraTelefone(this)" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :email, "E-mail", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.email_field :email, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border", placeholder: "exemplo@email.com" %>
+  </div>
+
+  <div class="flex justify-end gap-2 pt-4">
+    <%= link_to "Cancelar", usuarios_path, class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded" %>
+    <%= f.submit "Salvar Usuário", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer transition-colors" %>
+  </div>
+<% end %>
+
+<script>
+  function mascaraCPF(input) {
+    let value = input.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    value = value.replace(/(\d{3})(\d)/, "$1.$2");
+    value = value.replace(/(\d{3})(\d)/, "$1.$2");
+    value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    input.value = value;
+  }
+
+  function mascaraTelefone(input) {
+    let value = input.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    if (value.length > 10) {
+      value = value.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    } else if (value.length > 5) {
+      value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    } else if (value.length > 2) {
+      value = value.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+    } else {
+      value = value.replace(/^(\d*)/, "($1");
+    }
+    input.value = value;
+  }
+</script>
