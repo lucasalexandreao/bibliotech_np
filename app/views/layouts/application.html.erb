@@ -5,44 +5,85 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.default.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+
+    <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
-    <header class="bg-blue-800 text-white shadow-md">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div class="font-bold text-xl">
-          📚 Biblioteca Ney Pontes
-        </div>
-        <nav>
-          <% if bibliotecario_signed_in? %>
-            <span class="mr-4 text-sm">Olá, <%= current_bibliotecario.nome %></span>
-            <%= button_to "Sair", destroy_bibliotecario_session_path, method: :delete, class: "text-blue-200 hover:text-white text-sm font-semibold" %>
-          <% end %>
-        </nav>
-      </div>
-    </header>
+  <body class="bg-gray-50 min-h-screen text-gray-800">
+    
+    <% if bibliotecario_signed_in? %>
+      <nav class="bg-blue-800 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16">
+            
+            <div class="flex items-center">
+              <div class="flex-shrink-0 text-white font-bold text-xl flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                </svg>
+                Bibliotech
+              </div>
+              <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-2">
+                  <%= link_to "Início", root_path, class: nav_link_class(root_path) %>
+                  <%= link_to "Empréstimos", emprestimos_path, class: nav_link_class(emprestimos_path) %>
+                  <%= link_to "Acervo", livros_path, class: nav_link_class(livros_path) %>
+                  <%= link_to "Leitores", usuarios_path, class: nav_link_class(usuarios_path) %>
+                  <%= link_to "Categorias", categorias_path, class: nav_link_class(categorias_path) %>
+                  
+                  <% if current_bibliotecario.admin? %>
+                    <%= link_to "Equipe", gestao_bibliotecarios_path, class: nav_link_class(gestao_bibliotecarios_path) %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
-      <% flash.each do |key, message| %>
-        <div class="p-4 mb-4 rounded shadow-sm <%= key == 'notice' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
-          <%= message %>
+            <div class="hidden md:block">
+              <div class="ml-4 flex items-center md:ml-6 gap-4">
+                <span class="text-sm text-blue-200">Olá, <strong><%= current_bibliotecario.nome %></strong></span>
+                <%= button_to "Sair", destroy_bibliotecario_session_path, method: :delete, class: "text-blue-100 hover:text-white bg-blue-900 hover:bg-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors" %>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </nav>
+    <% end %>
+
+    <main class="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
+      
+      <% if notice %>
+        <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-r shadow-sm flex items-start justify-between transition-all duration-300">
+          <div class="flex items-start">
+            <svg class="h-5 w-5 text-green-500 mr-3 mt-0.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+            <p class="text-sm text-green-800 font-medium"><%= notice %></p>
+          </div>
+          <button type="button" onclick="this.closest('div').remove()" class="ml-4 text-green-500 hover:text-green-700 focus:outline-none flex-shrink-0" title="Fechar">
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
         </div>
       <% end %>
-    </div>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+      <% if alert %>
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-r shadow-sm flex items-start justify-between transition-all duration-300">
+          <div class="flex items-start">
+            <svg class="h-5 w-5 text-red-500 mr-3 mt-0.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+            <p class="text-sm text-red-800 font-medium"><%= alert %></p>
+          </div>
+          <button type="button" onclick="this.closest('div').remove()" class="ml-4 text-red-500 hover:text-red-700 focus:outline-none flex-shrink-0" title="Fechar">
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+      <% end %>
+
       <%= yield %>
     </main>
 
-    <footer class="bg-white border-t border-gray-200 py-4 mt-auto">
-      <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500">
-        &copy; <%= Time.current.year %> - Prefeitura de Mossoró/RN. Desafio de Estágio.
-      </div>
-    </footer>
   </body>
 </html>
