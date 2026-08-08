@@ -4,6 +4,8 @@ class Usuario < ApplicationRecord
   validates :nome, :cpf, :email, :telefone, presence: true
   validates :cpf, uniqueness: { case_sensitive: false }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :cpf, length: { is: 11, message: "deve conter exatamente 11 números" }
+  validates :telefone, length: { in: 10..11, message: "deve conter 10 ou 11 números (com DDD)" }
 
   before_validation :gerar_senha_emprestimo, on: :create
   before_validation :limpar_formatacao
