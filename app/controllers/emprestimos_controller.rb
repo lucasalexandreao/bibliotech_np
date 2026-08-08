@@ -26,6 +26,17 @@ class EmprestimosController < ApplicationController
     end
   end
 
+  def devolver
+    @emprestimo = Emprestimo.find(params[:id])
+
+    if @emprestimo.ativo?
+      @emprestimo.registrar_devolucao!
+      redirect_back fallback_location: emprestimos_path, notice: "Livro devolvido com sucesso! O exemplar já está disponível no acervo."
+    else
+      redirect_back fallback_location: emprestimos_path, alert: "Este empréstimo já consta como devolvido."
+    end
+  end
+
   private
 
   def emprestimo_params

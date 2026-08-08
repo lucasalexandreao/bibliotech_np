@@ -13,6 +13,16 @@ class Emprestimo < ApplicationRecord
   before_validation :configurar_datas, on: :create
   after_create :marcar_livro_como_emprestado
 
+  def registrar_devolucao!
+    transaction do
+      update!(
+        status: :devolvido,
+        data_devolucao_realizada: Date.current
+      )
+      livro.disponivel!
+    end
+  end
+
   private
 
   def configurar_datas
@@ -50,5 +60,14 @@ class Emprestimo < ApplicationRecord
 
   def marcar_livro_como_emprestado
     livro.emprestado!
+  end
+
+  # Libera atributos para os filtros do Ransack
+  def self.ransackable_attributes(auth_object = nil)
+    ["status", "data_emprestimo", "data_devolucao_prevista", "data_devolucao_realizada"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["livro", "usuario"]
   end
 end

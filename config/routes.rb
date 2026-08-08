@@ -9,9 +9,15 @@ Rails.application.routes.draw do
 
   resources :gestao_bibliotecarios, except: [ :show ]
   resources :categorias, except: [ :show ]
+  resources :usuarios
+
   resources :livros do
     resources :emprestimos, only: [ :new, :create ]
   end
-  resources :emprestimos, only: [ :index ]
-  resources :usuarios
+
+  resources :emprestimos, only: [ :index ] do
+    member do
+      patch :devolver
+    end
+  end
 end

@@ -1,0 +1,91 @@
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Histórico de Empréstimos</h1>
+  </div>
+
+  <%= search_form_for @q, url: emprestimos_path, data: { turbo_frame: "resultados_emprestimos" }, class: "mb-6 grid grid-cols-1 md:grid-cols-4 gap-4 items-end bg-gray-50 p-4 rounded-md border border-gray-200" do |f| %>
+    <div>
+      <%= f.label :usuario_nome_cont, "Leitor", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :usuario_nome_cont, class: "w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border", placeholder: "Nome do leitor...", oninput: "this.form.requestSubmit()" %>
+    </div>
+
+    <div>
+      <%= f.label :livro_titulo_cont, "Livro", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :livro_titulo_cont, class: "w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border", placeholder: "Título do livro...", oninput: "this.form.requestSubmit()" %>
+    </div>
+
+    <div>
+      <%= f.label :status_eq, "Situação", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.select :status_eq, Emprestimo.statuses.map { |k, v| [k.capitalize, v] }, { include_blank: "Todos" }, class: "w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border bg-white", onchange: "this.form.requestSubmit()" %>
+    </div>
+
+    <div class="flex justify-end">
+      <%= link_to "Limpar Filtros", emprestimos_path, class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-block text-sm" %>
+    </div>
+  <% end %>
+
+  <%= turbo_frame_tag "resultados_emprestimos" do %>
+    <div class="overflow-x-auto mb-4 border border-gray-200 rounded-lg shadow-sm">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Livro</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Leitor</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Empréstimo</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prazo</th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @emprestimos.each do |emp| %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                <%= emp.livro.titulo %>
+                <div class="text-xs text-gray-500 font-normal">Exemplar #<%= emp.livro.id %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                <%= emp.usuario.nome %>
+                <div class="text-xs text-gray-500"><%= emp.usuario.cpf %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><%= l(emp.data_emprestimo) %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium <%= emp.ativo? && emp.data_devolucao_prevista < Date.current ? 'text-red-600' : 'text-gray-600' %>">
+                <%= l(emp.data_devolucao_prevista) %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-center">
+                <% if emp.devolvido? %>
+                  <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    Devolvido em <%= l(emp.data_devolucao_realizada) %>
+                  </span>
+                <% elsif emp.data_devolucao_prevista < Date.current %>
+                  <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                    Atrasado
+                  </span>
+                <% else %>
+                  <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                    Ativo
+                  </span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <% if emp.ativo? %>
+                  <%= button_to "Registrar Devolução", devolver_emprestimo_path(emp), method: :patch, data: { turbo_confirm: "Confirmar a devolução deste exemplar?", turbo_frame: "_top" }, class: "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1.5 px-3 rounded text-xs transition-colors" %>
+                <% else %>
+                  <span class="text-gray-400 text-xs italic">Finalizado</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <% if @emprestimos.empty? %>
+        <div class="p-6 text-center text-gray-500">Nenhum registro de empréstimo encontrado.</div>
+      <% end %>
+    </div>
+
+    <div class="flex justify-center mt-4">
+      <%== @pagy.series_nav if @pagy.pages > 1 %>
+    </div>
+  <% end %>
+</div>
