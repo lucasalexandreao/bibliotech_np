@@ -1,5 +1,4 @@
 class Bibliotecario < ApplicationRecord
-
   acts_as_paranoid # soft delete
 
   enum :papel, { comum: 0, admin: 1 } # níveis de acesso
@@ -7,13 +6,12 @@ class Bibliotecario < ApplicationRecord
   # Módulos do devise (autenticação)
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  
 
-  # Validações
+  validates :nome, presence: true
   validate :senha_obrigatoria_no_primeiro_acesso
 
   def self.ransackable_attributes(auth_object = nil)
-    ["nome", "email", "papel"]
+    [ "nome", "email", "papel" ]
   end
 
   private

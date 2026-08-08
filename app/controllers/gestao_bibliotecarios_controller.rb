@@ -1,5 +1,4 @@
 class GestaoBibliotecariosController < ApplicationController
-  before_action :authenticate_bibliotecario!
   load_and_authorize_resource class: "Bibliotecario", instance_name: :bibliotecario, param_method: :bibliotecario_params
 
   def index
@@ -44,7 +43,7 @@ class GestaoBibliotecariosController < ApplicationController
   end
 
   def destroy
-    @bibliotecario.destroy # Graças ao acts_as_paranoid, isso fará um soft delete
+    @bibliotecario.destroy
     redirect_to gestao_bibliotecarios_path, notice: 'Bibliotecário removido do sistema.'
   end
 
