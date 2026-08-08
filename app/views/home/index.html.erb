@@ -1,5 +1,105 @@
-<div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-  <h1 class="text-2xl font-bold text-gray-800 mb-4">Painel da Biblioteca</h1>
-  <p class="text-gray-600">Bem-vindo(a) ao sistema de gestão da Biblioteca Municipal Ney Pontes.</p>
-  <p class="text-gray-600 mt-2">Você está autenticado(a) como: <strong class="text-blue-600"><%= current_bibliotecario.nome %></strong> (<%= current_bibliotecario.papel %>).</p>
+<div class="mb-8">
+  <h1 class="text-3xl font-extrabold text-gray-900">Visão Geral da Biblioteca</h1>
+  <p class="text-gray-500 mt-2">Acompanhe os indicadores do acervo e gerencie empréstimos em tempo real.</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+  
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center">
+    <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path></svg>
+    </div>
+    <div>
+      <p class="text-sm font-medium text-gray-500">Total no Acervo</p>
+      <p class="text-2xl font-bold text-gray-900"><%= @total_acervo %></p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center">
+    <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    </div>
+    <div>
+      <p class="text-sm font-medium text-gray-500">Exemplares Disponíveis</p>
+      <p class="text-2xl font-bold text-gray-900"><%= @livros_disponiveis %></p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center">
+    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+    </div>
+    <div>
+      <p class="text-sm font-medium text-gray-500">Empréstimos Ativos</p>
+      <p class="text-2xl font-bold text-gray-900"><%= @emprestimos_ativos %></p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center">
+    <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+    </div>
+    <div>
+      <p class="text-sm font-medium text-gray-500">Leitores Cadastrados</p>
+      <p class="text-2xl font-bold text-gray-900"><%= @total_leitores %></p>
+    </div>
+  </div>
+
+</div>
+
+<div class="bg-white rounded-lg shadow-sm border border-red-200 overflow-hidden">
+  <div class="bg-red-50 px-6 py-4 border-b border-red-200 flex justify-between items-center">
+    <h2 class="text-lg font-bold text-red-800 flex items-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+      Atenção: Empréstimos Atrasados (<%= @emprestimos_atrasados.count %>)
+    </h2>
+    <%= link_to "Ver todos os empréstimos", emprestimos_path, class: "text-sm font-medium text-red-700 hover:text-red-900 underline" %>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Leitor / Contato</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Livro Atrasado</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prazo Original</th>
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% if @emprestimos_atrasados.any? %>
+          <% @emprestimos_atrasados.each do |emp| %>
+            <tr class="hover:bg-red-50/50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-bold text-gray-900"><%= emp.usuario.nome %></div>
+                <div class="text-xs text-gray-500"><%= emp.usuario.telefone %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900"><%= emp.livro.titulo %></div>
+                <div class="text-xs text-gray-500">Exemplar #<%= emp.livro.id %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                  <%= l(emp.data_devolucao_prevista) %>
+                </span>
+                <div class="text-xs text-red-600 mt-1 font-medium">
+                  <%= (Date.current - emp.data_devolucao_prevista).to_i %> dias de atraso
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <%= button_to "Registrar Devolução", devolver_emprestimo_path(emp), method: :patch, data: { turbo_confirm: "Confirmar a devolução deste exemplar atrasado?" }, class: "text-indigo-600 hover:text-indigo-900 font-bold transition-colors" %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+              <svg class="mx-auto h-12 w-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Excelente! Não há nenhum empréstimo atrasado no momento.
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
