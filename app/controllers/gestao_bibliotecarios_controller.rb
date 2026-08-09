@@ -6,7 +6,7 @@ class GestaoBibliotecariosController < ApplicationController
     @q = Bibliotecario.ransack(params[:q])
     
     # Executa a busca e passa o resultado para o Pagy paginar
-    @pagy, @bibliotecarios = pagy(:offset, @q.result(distinct: true).order(:nome), limit: 2)
+    @pagy, @bibliotecarios = pagy(:offset, @q.result(distinct: true).order(:nome), limit: 5)
   end
 
   def new

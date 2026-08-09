@@ -7,7 +7,7 @@ class CategoriasController < ApplicationController
     @q = Categoria.ransack(params[:q])
 
     # Executa a busca e passa o resultado para o Pagy paginar
-    @pagy, @categorias = pagy(:offset, @q.result(distinct: true).order(:nome), limit: 1)
+    @pagy, @categorias = pagy(:offset, @q.result(distinct: true).order(:nome), limit: 5)
   end
 
   def new
