@@ -12,8 +12,20 @@ class UsuariosController < ApplicationController
   def create
     if @usuario.save
       UsuarioMailer.enviar_senha_emprestimo(@usuario).deliver_now
-
-      redirect_to usuarios_path, notice: 'Usuário cadastrado com sucesso. A senha de empréstimo foi enviada por e-mail.'
+      
+      respond_to do |format|
+        if params[:livro_id].present?
+          format.turbo_stream do
+            @livro = Livro.find(params[:livro_id])
+            @emprestimo = @livro.emprestimos.build(usuario_id: @usuario.id)
+            
+            flash.now[:notice] = "Leitor cadastrado com sucesso! A senha foi enviada por e-mail."
+            render "emprestimos/new" 
+          end
+        else
+          format.html { redirect_to usuarios_path, notice: 'Usuário cadastrado com sucesso. A senha foi enviada por e-mail.' }
+        end
+      end
     else
       render :new, status: :unprocessable_entity
     end

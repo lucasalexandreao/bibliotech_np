@@ -1,4 +1,5 @@
-<%= form_with(model: @usuario, data: { turbo_frame: "_top" }, class: "space-y-4") do |f| %>
+<%= form_with(model: @usuario, class: "space-y-4") do |f| %>
+  <%= hidden_field_tag :livro_id, params[:livro_id] if params[:livro_id].present? %>
   <% if @usuario.errors.any? %>
     <div class="bg-red-50 text-red-600 p-4 rounded mb-4">
       <ul class="list-disc pl-5">
