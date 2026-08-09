@@ -31,8 +31,11 @@ class UsuariosController < ApplicationController
   end
 
   def destroy
-    @usuario.destroy
-    redirect_to usuarios_path, notice: 'Usuário removido com sucesso.'
+    if @usuario.destroy
+      redirect_to usuarios_path, notice: 'Usuário removido com sucesso.'
+    else
+      redirect_to usuarios_path, alert: 'Não é possível remover este leitor, pois há um histórico de empréstimos associado a ele'
+    end
   end
 
   private

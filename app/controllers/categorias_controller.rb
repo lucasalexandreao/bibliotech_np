@@ -33,8 +33,11 @@ class CategoriasController < ApplicationController
   end
 
   def destroy
-    @categoria.destroy
-    redirect_to categorias_path, notice: 'Categoria removida do sistema.'
+    if @categoria.destroy
+      redirect_to categorias_path, notice: 'Categoria removida do sistema.'
+    else
+      redirect_to categoria_path, alert: 'Não é possível remover esta categoria, pois há livros associados a ela.'
+    end
   end
 
   private

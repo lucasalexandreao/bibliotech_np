@@ -35,7 +35,7 @@ class LivrosController < ApplicationController
     if @livro.destroy
       redirect_to livros_path, notice: 'Livro removido do acervo.'
     else
-      redirect_to livros_path, alert: 'Não foi possível remover este livro.'
+      redirect_to livros_path, alert: 'Não foi possível remover este livro, pois há um histórico de empréstimos associado a ele'
     end
   end
 

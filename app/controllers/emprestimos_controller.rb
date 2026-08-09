@@ -37,6 +37,16 @@ class EmprestimosController < ApplicationController
     end
   end
 
+  def renovar
+    @emprestimo = Emprestimo.find(params[:id])
+
+    if @emprestimo.renovar!
+      redirect_back fallback_location: emprestimos_path, notice: "Empréstimo renovado com sucesso! Novo prazo: #{l(@emprestimo.data_devolucao_prevista)}"
+    else
+      redirect_back fallback_location: emprestimos_path, alert: 'Não foi possível renovar. O empréstimo está atrasado ou inativo.'
+    end
+  end
+
   private
 
   def emprestimo_params

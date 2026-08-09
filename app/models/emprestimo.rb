@@ -23,6 +23,17 @@ class Emprestimo < ApplicationRecord
     end
   end
 
+  def pode_ser_renovado?
+    ativo? && Date.current <= data_devolucao_prevista
+  end
+
+  def renovar!
+    return false unless pode_ser_renovado?
+
+    nova_data = calcular_dias_uteis(data_devolucao_prevista, 15)
+    update(data_devolucao_prevista: nova_data)
+  end
+
   private
 
   def configurar_datas

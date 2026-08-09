@@ -70,11 +70,23 @@
                 <% end %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <% if emp.ativo? %>
-                  <%= button_to "Registrar Devolução", devolver_emprestimo_path(emp), method: :patch, data: { turbo_confirm: "Confirmar a devolução deste exemplar?", turbo_frame: "_top" }, class: "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1.5 px-3 rounded text-xs transition-colors" %>
-                <% else %>
-                  <span class="text-gray-400 text-xs italic">Finalizado</span>
-                <% end %>
+                <div class="flex justify-end items-center space-x-3">
+                  <% if emp.ativo? %>
+                    <% if emp.pode_ser_renovado? %>
+                      <%= button_to renovar_emprestimo_path(emp), method: :patch, data: { turbo_confirm: "Renovar este empréstimo por mais 15 dias?", turbo_frame: "_top"}, class: "text-green-600 hover:text-green-900 transition-colors inline-block p-1", title: "Renovar Empréstimo" do %>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 pointer-events-none">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                      <% end %>
+                    <% end %>
+                      <%= button_to devolver_emprestimo_path(emp), method: :patch, data: { turbo_confirm: "Confirmar a devolução deste exemplar?", turbo_frame: "_top" }, class: "text-amber-600 hover:text-amber-900 transition-colors", title: "Registrar Devolução" do %>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                        </svg>
+                      <% end %>                <% else %>
+                    <span class="text-gray-400 text-xs italic">Finalizado</span>
+                  <% end %>
+                </div>
               </td>
             </tr>
           <% end %>

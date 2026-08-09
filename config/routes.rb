@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :emprestimos, only: [ :index ] do
     member do
       patch :devolver
+      patch :renovar
     end
   end
 end
