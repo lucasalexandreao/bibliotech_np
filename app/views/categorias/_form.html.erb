@@ -1,4 +1,4 @@
-<%= form_with(model: @categoria, class: "space-y-4") do |f| %>
+<%= form_with(model: @categoria, data: { turbo_frame: "_top" }, class: "space-y-4") do |f| %>
   <% if @categoria.errors.any? %>
     <div class="bg-red-50 text-red-600 p-4 rounded mb-4">
       <ul class="list-disc pl-5">
@@ -15,7 +15,9 @@
   </div>
 
   <div class="flex justify-end gap-2 pt-4">
-    <%= link_to "Cancelar", categorias_path, class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded" %>
+    <button type="button" onclick="document.getElementById('modal').innerHTML=''" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded transition-colors cursor-pointer">
+      Cancelar
+    </button>
     <%= f.submit "Salvar Categoria", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer transition-colors" %>
   </div>
 <% end %>
