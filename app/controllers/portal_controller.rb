@@ -8,8 +8,6 @@ class PortalController < ApplicationController
     cpf_limpo = params[:cpf].to_s.gsub(/\D/, '')
     usuario = Usuario.find_by(cpf: cpf_limpo)
 
-    binding.irb
-
     if usuario && usuario.authenticate(params[:senha_emprestimo])
       session[:leitor_id] = usuario.id
       redirect_to portal_meus_emprestimos_path, notice: "Bem-vindo ao Portal do Leitor, #{usuario.nome}!"
