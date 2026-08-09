@@ -21,4 +21,12 @@ Rails.application.routes.draw do
       patch :renovar
     end
   end
+
+  # Rotas do Portal do Leitor
+  get 'portal', to: 'portal#login', as: 'portal_login'
+  post 'portal/autenticar', to: 'portal#autenticar', as: 'portal_autenticar'
+  delete 'portal/logout', to: 'portal#logout', as: 'portal_logout'
+  
+  get 'portal/meus_emprestimos', to: 'portal#meus_emprestimos', as: 'portal_meus_emprestimos'
+  patch 'portal/renovar/:id', to: 'portal#renovar', as: 'portal_renovar'
 end

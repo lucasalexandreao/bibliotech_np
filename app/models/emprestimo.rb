@@ -58,8 +58,9 @@ class Emprestimo < ApplicationRecord
 
     if senha_emprestimo_digitada.blank?
       errors.add(:senha_emprestimo_digitada, "deve ser informada")
-    elsif usuario.senha_emprestimo != senha_emprestimo_digitada.strip.upcase
-      errors.add(:senha_emprestimo_digitada, "inválida. Verifique com o usuário.")
+
+    elsif !usuario.authenticate(senha_emprestimo_digitada.strip.upcase)
+      errors.add(:senha_emprestimo_digitada, "inválida. Verifique com o leitor.")
     end
   end
 

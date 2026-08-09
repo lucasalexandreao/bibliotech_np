@@ -1,4 +1,8 @@
 class Usuario < ApplicationRecord
+  has_secure_password
+
+  attr_accessor :senha_plana
+
   has_many :emprestimos, dependent: :restrict_with_error
 
   validates :nome, :cpf, :email, :telefone, presence: true
@@ -7,7 +11,7 @@ class Usuario < ApplicationRecord
   validates :cpf, length: { is: 11, message: "deve conter exatamente 11 números" }
   validates :telefone, length: { in: 10..11, message: "deve conter 10 ou 11 números (com DDD)" }
 
-  before_validation :gerar_senha_emprestimo, on: :create
+  before_validation :gerar_senha_inicial, on: :create
   before_validation :limpar_formatacao
 
   def self.ransackable_attributes(auth_object = nil)
@@ -20,8 +24,14 @@ class Usuario < ApplicationRecord
 
   private
 
-  def gerar_senha_emprestimo
-    self.senha_emprestimo ||= SecureRandom.alphanumeric(6).upcase
+  def gerar_senha_inicial
+    if self.password.blank?
+      # Gera a senha em texto puro e guarda na memória (atributo virtual)
+      self.senha_plana = SecureRandom.alphanumeric(6).upcase
+
+      # Passa para o Bcrypt transformar no hash (password_digest)
+      self.password = self.senha_plana
+    end
   end
 
   def limpar_formatacao
