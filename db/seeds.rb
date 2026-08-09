@@ -99,26 +99,4 @@ Emprestimo.create!(
   status: 0 # ativo, mas com data vencida
 )
 
-# 5. Empréstimo DEVOLVIDO no prazo correto
-Emprestimo.create!(
-  livro: livros[4],
-  usuario: usuarios[4],
-  senha_emprestimo_digitada: "SENHA123",
-  data_emprestimo: data_hoje - 30.days,
-  data_devolucao_prevista: data_hoje - 15.days,
-  data_devolucao_realizada: data_hoje - 16.days,
-  status: 1 # devolvido
-)
-
-# 6. Empréstimo DEVOLVIDO com atraso
-Emprestimo.create!(
-  livro: livros[5],
-  usuario: usuarios[5],
-  senha_emprestimo_digitada: "SENHA123",
-  data_emprestimo: data_hoje - 60.days,
-  data_devolucao_prevista: data_hoje - 45.days,
-  data_devolucao_realizada: data_hoje - 40.days,
-  status: 1 # devolvido
-)
-
 puts "✅ Seeds finalizados com sucesso! O banco está populado e pronto para uso."
