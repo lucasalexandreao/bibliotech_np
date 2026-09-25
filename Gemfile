@@ -72,7 +72,7 @@ gem "acts_as_paranoid", "~> 0.11.0"
 
 gem "devise-i18n", "~> 1.16"
 
-gem "ransack", "~> 4.4"
+gem "ransack", "~> 5.0"
 gem "pagy", "~> 43.6"
 
 gem "letter_opener", "~> 1.10", :group => :development
